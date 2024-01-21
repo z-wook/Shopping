@@ -13,6 +13,10 @@
 		3323B6872B59A28600450BCB /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3323B6852B59A28600450BCB /* Main.storyboard */; };
 		3323B6892B59A28800450BCB /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3323B6882B59A28800450BCB /* Assets.xcassets */; };
 		3323B68C2B59A28800450BCB /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3323B68A2B59A28800450BCB /* LaunchScreen.storyboard */; };
+		3323B6942B59A6B900450BCB /* Splash.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3323B6932B59A6B900450BCB /* Splash.storyboard */; };
+		33A9E4742B5D2D9300CFA18F /* Lottie in Frameworks */ = {isa = PBXBuildFile; productRef = 33A9E4732B5D2D9300CFA18F /* Lottie */; };
+		33B2743A2B59A6FD0089B426 /* SplashViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33B274392B59A6FD0089B426 /* SplashViewController.swift */; };
+		33B2743D2B59A8FF0089B426 /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = 33B2743C2B59A8FF0089B426 /* SnapKit */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -24,6 +28,8 @@
 		3323B6882B59A28800450BCB /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		3323B68B2B59A28800450BCB /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		3323B68D2B59A28800450BCB /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		3323B6932B59A6B900450BCB /* Splash.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Splash.storyboard; sourceTree = "<group>"; };
+		33B274392B59A6FD0089B426 /* SplashViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplashViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -31,6 +37,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				33B2743D2B59A8FF0089B426 /* SnapKit in Frameworks */,
+				33A9E4742B5D2D9300CFA18F /* Lottie in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -62,6 +70,8 @@
 				3323B6852B59A28600450BCB /* Main.storyboard */,
 				3323B6882B59A28800450BCB /* Assets.xcassets */,
 				3323B68A2B59A28800450BCB /* LaunchScreen.storyboard */,
+				3323B6932B59A6B900450BCB /* Splash.storyboard */,
+				33B274392B59A6FD0089B426 /* SplashViewController.swift */,
 				3323B68D2B59A28800450BCB /* Info.plist */,
 			);
 			path = Shopping;
@@ -83,6 +93,10 @@
 			dependencies = (
 			);
 			name = Shopping;
+			packageProductDependencies = (
+				33B2743C2B59A8FF0089B426 /* SnapKit */,
+				33A9E4732B5D2D9300CFA18F /* Lottie */,
+			);
 			productName = Shopping;
 			productReference = 3323B67C2B59A28600450BCB /* Shopping.app */;
 			productType = "com.apple.product-type.application";
@@ -111,6 +125,10 @@
 				Base,
 			);
 			mainGroup = 3323B6732B59A28600450BCB;
+			packageReferences = (
+				33B2743B2B59A8FF0089B426 /* XCRemoteSwiftPackageReference "SnapKit" */,
+				33A9E4722B5D2D9300CFA18F /* XCRemoteSwiftPackageReference "lottie-ios" */,
+			);
 			productRefGroup = 3323B67D2B59A28600450BCB /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -128,6 +146,7 @@
 				3323B68C2B59A28800450BCB /* LaunchScreen.storyboard in Resources */,
 				3323B6892B59A28800450BCB /* Assets.xcassets in Resources */,
 				3323B6872B59A28600450BCB /* Main.storyboard in Resources */,
+				3323B6942B59A6B900450BCB /* Splash.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -141,6 +160,7 @@
 				3323B6842B59A28600450BCB /* ViewController.swift in Sources */,
 				3323B6802B59A28600450BCB /* AppDelegate.swift in Sources */,
 				3323B6822B59A28600450BCB /* SceneDelegate.swift in Sources */,
+				33B2743A2B59A6FD0089B426 /* SplashViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -297,7 +317,7 @@
 				INFOPLIST_FILE = Shopping/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
-				INFOPLIST_KEY_UIMainStoryboardFile = Main;
+				INFOPLIST_KEY_UIMainStoryboardFile = Splash;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
@@ -330,7 +350,7 @@
 				INFOPLIST_FILE = Shopping/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
-				INFOPLIST_KEY_UIMainStoryboardFile = Main;
+				INFOPLIST_KEY_UIMainStoryboardFile = Splash;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
@@ -373,6 +393,38 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		33A9E4722B5D2D9300CFA18F /* XCRemoteSwiftPackageReference "lottie-ios" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/airbnb/lottie-ios.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 4.3.4;
+			};
+		};
+		33B2743B2B59A8FF0089B426 /* XCRemoteSwiftPackageReference "SnapKit" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/SnapKit/SnapKit";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 5.7.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		33A9E4732B5D2D9300CFA18F /* Lottie */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 33A9E4722B5D2D9300CFA18F /* XCRemoteSwiftPackageReference "lottie-ios" */;
+			productName = Lottie;
+		};
+		33B2743C2B59A8FF0089B426 /* SnapKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 33B2743B2B59A8FF0089B426 /* XCRemoteSwiftPackageReference "SnapKit" */;
+			productName = SnapKit;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 3323B6742B59A28600450BCB /* Project object */;
 }
