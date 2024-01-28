@@ -21,15 +21,11 @@ class SplashViewController: UIViewController {
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         
-//        lottieAnimationView?.play { _ in
-//            if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
-//               let window = windowScene.windows.first(where: { $0.isKeyWindow }) {
-//                window.rootViewController = HomeViewController()
-//            }
-//        }
-        if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
-           let window = windowScene.windows.first(where: { $0.isKeyWindow }) {
-            window.rootViewController = HomeViewController()
+        lottieAnimationView?.play { _ in
+            if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
+               let window = windowScene.windows.first(where: { $0.isKeyWindow }) {
+                window.rootViewController = HomeViewController()
+            }
         }
     }
 }

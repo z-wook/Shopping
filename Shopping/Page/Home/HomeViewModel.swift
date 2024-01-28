@@ -8,11 +8,24 @@
 import Combine
 import UIKit
 
-final class HomeViewModel: ObservableObject {
+class HomeViewModel: ObservableObject {
+    enum Action {
+        case loadData
+        case getDataSuccess(HomeResponse)
+        case getDataFailure(Error)
+    }
+    
+    final class State {
+        struct CollectionViewModels {
+            var bannerItems: [Item]?
+            var horizontalProductItems: [Item]?
+            var verticalProductItems: [Item]?
+        }
+        @Published var collectionViewModels = CollectionViewModels()
+    }
+    
+    private(set) var state = State()
     private var loadDataTask: Task<Void, Never>?
-    @Published var bannerItems: [Item]?
-    @Published var horizontalProductItems: [Item]?
-    @Published var verticalProductItems: [Item]?
     
     deinit {
         loadDataTask?.cancel()
@@ -20,24 +33,38 @@ final class HomeViewModel: ObservableObject {
 }
 
 extension HomeViewModel {
-    func loadData() {
-        loadDataTask = Task {
-            do {
-                let response = try await NetworkManager.shared.getHomeData()
+    func process(action: Action) {
+        switch action {
+        case .loadData:
+            loadData()
+        case .getDataSuccess(let response):
+            Task {
                 await makeItems(response: response)
-            } catch {
-                print("network error: \(error)")
             }
+        case .getDataFailure(let error):
+            print("network error: \(error)")
+            
         }
     }
 }
 
 private extension HomeViewModel {
+    func loadData() {
+        loadDataTask = Task {
+            do {
+                let response = try await NetworkManager.shared.getHomeData()
+                process(action: .getDataSuccess(response))
+            } catch {
+                process(action: .getDataFailure(error))
+            }
+        }
+    }
+    
     // 데이터를 받은 후 UI Update가 메인 스레드에서 동작해야 하므로 MainActor 사용
     @MainActor
     func makeItems(response: HomeResponse) async {
-        bannerItems = response.banners.map { Item.banner($0) }
-        horizontalProductItems = response.horizontalProducts.map { Item.horizontalProduct($0) }
-        verticalProductItems = response.verticalProducts.map { Item.verticalProduct($0) }
+        state.collectionViewModels.bannerItems = response.banners.map { Item.banner($0) }
+        state.collectionViewModels.horizontalProductItems = response.horizontalProducts.map { Item.horizontalProduct($0) }
+        state.collectionViewModels.verticalProductItems = response.verticalProducts.map { Item.verticalProduct($0) }
     }
 }

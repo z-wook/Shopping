@@ -7,6 +7,14 @@
 
 import Foundation
 
+enum NetworkError: Error {
+    case urlError
+    case responseError
+    case decodeError
+    case serverError(statusCode: Int)
+    case unknownError
+}
+
 final class NetworkManager {
     static let shared = NetworkManager()
     
@@ -15,12 +23,36 @@ final class NetworkManager {
 
 extension NetworkManager {
     func getHomeData() async throws -> HomeResponse {
-        let urlString = HOME_API
-        guard let url = URL(string: urlString) else { throw URLError(.badURL) }
-         
+        let url = try createURL(path: "/db")
+        let data = try await fetchData(from: url)
+        do {
+            let decodeData = try JSONDecoder().decode(HomeResponse.self, from: data)
+            return decodeData
+        } catch {
+            throw NetworkError.decodeError
+        }
+    }
+}
+
+private extension NetworkManager {
+    func createURL(path: String) throws -> URL {
+        let urlString = "\(HOST_URL)\(path)"
+        guard let url = URL(string: urlString) else { throw NetworkError.urlError }
+        return url
+    }
+    
+    func fetchData(from url: URL) async throws -> Data {
         let (data, response) = try await URLSession.shared.data(from: url)
-        guard let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode == 200 else { throw URLError(.badServerResponse) }
-        let decodeData = try JSONDecoder().decode(HomeResponse.self, from: data)
-        return decodeData
+        guard let httpResponse = response as? HTTPURLResponse else {
+            throw NetworkError.responseError
+        }
+        
+        switch httpResponse.statusCode {
+        case 200...299:
+            return data
+            
+        default:
+            throw NetworkError.serverError(statusCode: httpResponse.statusCode)
+        }
     }
 }

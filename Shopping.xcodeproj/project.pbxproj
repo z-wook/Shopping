@@ -33,6 +33,7 @@
 		33B8563D2B63A91100F9F69C /* Themes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33B8563C2B63A91100F9F69C /* Themes.swift */; };
 		33B8563F2B63A97A00F9F69C /* HomeResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33B8563E2B63A97A00F9F69C /* HomeResponse.swift */; };
 		33B856422B65C6AB00F9F69C /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = 33B856412B65C6AB00F9F69C /* Kingfisher */; };
+		33B856452B66E95D00F9F69C /* Numeric+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33B856442B66E95D00F9F69C /* Numeric+.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -61,6 +62,7 @@
 		33B274392B59A6FD0089B426 /* SplashViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplashViewController.swift; sourceTree = "<group>"; };
 		33B8563C2B63A91100F9F69C /* Themes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Themes.swift; sourceTree = "<group>"; };
 		33B8563E2B63A97A00F9F69C /* HomeResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeResponse.swift; sourceTree = "<group>"; };
+		33B856442B66E95D00F9F69C /* Numeric+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Numeric+.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -130,6 +132,7 @@
 				3323B6812B59A28600450BCB /* SceneDelegate.swift */,
 				338195092B62BEA8003B4B47 /* Const.swift */,
 				33A9E4752B5D88A700CFA18F /* DesignSource */,
+				33B856432B66E8F700F9F69C /* Extension */,
 				3381950B2B62E3DA003B4B47 /* Model */,
 				338195062B62BDE5003B4B47 /* Network */,
 				330AA6132B5EBF6B004B0C02 /* Page */,
@@ -178,6 +181,14 @@
 				33A9E4782B5D8BA500CFA18F /* SPImage.swift */,
 			);
 			path = DesignSource;
+			sourceTree = "<group>";
+		};
+		33B856432B66E8F700F9F69C /* Extension */ = {
+			isa = PBXGroup;
+			children = (
+				33B856442B66E95D00F9F69C /* Numeric+.swift */,
+			);
+			path = Extension;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -275,6 +286,7 @@
 				33A9E47D2B5D96B400CFA18F /* SPColor.swift in Sources */,
 				3323B6802B59A28600450BCB /* AppDelegate.swift in Sources */,
 				338195052B626932003B4B47 /* HomeViewModel.swift in Sources */,
+				33B856452B66E95D00F9F69C /* Numeric+.swift in Sources */,
 				3323B6822B59A28600450BCB /* SceneDelegate.swift in Sources */,
 				330AA61D2B6123D8004B0C02 /* ProductInfo.swift in Sources */,
 				338195082B62BDF5003B4B47 /* NetworkManager.swift in Sources */,

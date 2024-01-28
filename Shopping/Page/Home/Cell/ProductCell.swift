@@ -123,9 +123,9 @@ extension ProductCell {
         productNameLabel.text = info.title
         discountReasonLabel.text = info.discount
         originalPriceLabel.attributedText = NSMutableAttributedString(
-            string: "\(info.originalPrice)" + "원",
+            string: "\(info.originalPrice.moneyString)",
             attributes: [NSAttributedString.Key.strikethroughStyle: NSUnderlineStyle.single.rawValue])
-        salePriceLabel.text = "\(info.discountPrice)" + "원"
+        salePriceLabel.text = "\(info.discountPrice.moneyString)"
     }
 }
 

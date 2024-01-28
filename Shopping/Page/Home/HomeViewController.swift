@@ -18,11 +18,11 @@ final class HomeViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        setLayout()
         configure()
+        setLayout()
         setDataSource()
         bindViewModel()
-        homeViewModel.loadData()
+        homeViewModel.process(action: .loadData)
     }
 }
 
@@ -43,21 +43,7 @@ private extension HomeViewController {
 
 private extension HomeViewController {
     func bindViewModel() {
-        homeViewModel.$bannerItems
-            .receive(on: DispatchQueue.main)
-            .sink { [weak self] _ in
-                self?.applyItems()
-            }
-            .store(in: &cancellables)
-        
-        homeViewModel.$horizontalProductItems
-            .receive(on: DispatchQueue.main)
-            .sink { [weak self] _ in
-                self?.applyItems()
-            }
-            .store(in: &cancellables)
-        
-        homeViewModel.$verticalProductItems
+        homeViewModel.state.$collectionViewModels
             .receive(on: DispatchQueue.main)
             .sink { [weak self] _ in
                 self?.applyItems()
@@ -85,17 +71,17 @@ private extension HomeViewController {
     
     func applyItems() {
         var snapShot = NSDiffableDataSourceSnapshot<Section, Item>()
-        if let bannerItems = homeViewModel.bannerItems {
+        if let bannerItems = homeViewModel.state.collectionViewModels.bannerItems {
             snapShot.appendSections([.banner])
             snapShot.appendItems(bannerItems, toSection: .banner)
         }
         
-        if let horizontalProductItems = homeViewModel.horizontalProductItems {
+        if let horizontalProductItems = homeViewModel.state.collectionViewModels.horizontalProductItems {
             snapShot.appendSections([.horizontalProduct])
             snapShot.appendItems(horizontalProductItems, toSection: .horizontalProduct)
         }
         
-        if let verticalProductItems = homeViewModel.verticalProductItems {
+        if let verticalProductItems = homeViewModel.state.collectionViewModels.verticalProductItems {
             snapShot.appendSections([.verticalProduct])
             snapShot.appendItems(verticalProductItems, toSection: .verticalProduct)
         }
