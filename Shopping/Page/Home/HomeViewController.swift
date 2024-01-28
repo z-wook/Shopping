@@ -5,6 +5,7 @@
 //  Copyright (c) 2024 z-wook. All right reserved.
 //
 
+import Combine
 import SnapKit
 import UIKit
 
@@ -12,14 +13,16 @@ final class HomeViewController: UIViewController {
     private let homeView = HomeView()
     private let homeViewModel = HomeViewModel()
     private var dataSource: UICollectionViewDiffableDataSource<Section, Item>?
+    private var cancellables = Set<AnyCancellable>()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        loadData()
         setLayout()
         configure()
         setDataSource()
+        bindViewModel()
+        homeViewModel.loadData()
     }
 }
 
@@ -35,6 +38,31 @@ private extension HomeViewController {
     
     func configure() {
         view.backgroundColor = UIColor.bk
+    }
+}
+
+private extension HomeViewController {
+    func bindViewModel() {
+        homeViewModel.$bannerItems
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] _ in
+                self?.applyItems()
+            }
+            .store(in: &cancellables)
+        
+        homeViewModel.$horizontalProductItems
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] _ in
+                self?.applyItems()
+            }
+            .store(in: &cancellables)
+        
+        homeViewModel.$verticalProductItems
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] _ in
+                self?.applyItems()
+            }
+            .store(in: &cancellables)
     }
     
     func setDataSource() {
@@ -55,30 +83,23 @@ private extension HomeViewController {
             })
     }
     
-    func applyItems(bannerData: [Item], horizontalData: [Item], verticalData: [Item]) {
+    func applyItems() {
         var snapShot = NSDiffableDataSourceSnapshot<Section, Item>()
-        Section.allCases.forEach {
-            snapShot.appendSections([$0])
+        if let bannerItems = homeViewModel.bannerItems {
+            snapShot.appendSections([.banner])
+            snapShot.appendItems(bannerItems, toSection: .banner)
         }
-        snapShot.appendItems(bannerData, toSection: .banner)
-        snapShot.appendItems(horizontalData, toSection: .horizontalProduct)
-        snapShot.appendItems(verticalData, toSection: .verticalProduct)
+        
+        if let horizontalProductItems = homeViewModel.horizontalProductItems {
+            snapShot.appendSections([.horizontalProduct])
+            snapShot.appendItems(horizontalProductItems, toSection: .horizontalProduct)
+        }
+        
+        if let verticalProductItems = homeViewModel.verticalProductItems {
+            snapShot.appendSections([.verticalProduct])
+            snapShot.appendItems(verticalProductItems, toSection: .verticalProduct)
+        }
         dataSource?.apply(snapShot)
-    }
-    
-    func loadData() {
-        Task {
-            do {
-                let response = try await NetworkManager.shared.getHomeData()
-                let items = homeViewModel.makeItems(response: response)
-                applyItems(
-                    bannerData: items.banner,
-                    horizontalData: items.horizontalProduct,
-                    verticalData: items.verticalProduct)
-            } catch {
-                print("network error: \(error)")
-            }
-        }
     }
 }
 

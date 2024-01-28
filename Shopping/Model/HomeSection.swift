@@ -7,7 +7,7 @@
 
 import Foundation
 
-enum Section: Int, CaseIterable {
+enum Section: Int {
     case banner
     case horizontalProduct
     case verticalProduct
