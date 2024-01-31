@@ -10,8 +10,19 @@ import UIKit
 final class HomeView: UIView {
     lazy var homeCollectionView: UICollectionView = {
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: .init())
-        collectionView.register(BannerCell.self, forCellWithReuseIdentifier: BannerCell.identifier)
-        collectionView.register(ProductCell.self, forCellWithReuseIdentifier: ProductCell.identifier)
+        collectionView.register(BannerCell.self,
+                                forCellWithReuseIdentifier: BannerCell.identifier)
+        collectionView.register(ProductCell.self,
+                                forCellWithReuseIdentifier: ProductCell.identifier)
+        collectionView.register(SeparateLineCell.self,
+                                forCellWithReuseIdentifier: SeparateLineCell.identifier)
+        collectionView.register(CouponButtonCell.self,
+                                forCellWithReuseIdentifier: CouponButtonCell.identifier)
+        collectionView.register(ThemeCell.self,
+                                forCellWithReuseIdentifier: ThemeCell.identifier)
+        collectionView.register(ThemeHeaderView.self,
+                                forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader,
+                                withReuseIdentifier: ThemeHeaderView.identifier)
         collectionView.setCollectionViewLayout(collectionViewLayout(), animated: true)
         return collectionView
     }()
@@ -37,16 +48,23 @@ private extension HomeView {
     }
     
     func collectionViewLayout() -> UICollectionViewCompositionalLayout {
-        UICollectionViewCompositionalLayout { sectionNum, _ -> NSCollectionLayoutSection in
+        UICollectionViewCompositionalLayout { [weak self] sectionNum, _ in
+            guard let self = self else { return nil }
             switch Section(rawValue: sectionNum) {
             case .banner:
                 return BannerCell.bannerSection()
             case .horizontalProduct:
                 return ProductCell.horizontalProductSection()
+            case .separateLine1, .separateLine2:
+                return SeparateLineCell.separateSection()
+            case .couponButton:
+                return CouponButtonCell.couponButtonSection()
             case .verticalProduct:
                 return ProductCell.verticalProductSection()
+            case .theme:
+                return ThemeCell.themeSection()
             case .none:
-                return BannerCell.bannerSection()
+                return nil
             }
         }
     }

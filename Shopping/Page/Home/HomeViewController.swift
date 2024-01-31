@@ -13,35 +13,32 @@ final class HomeViewController: UIViewController {
     private let homeView = HomeView()
     private let homeViewModel = HomeViewModel()
     private var dataSource: UICollectionViewDiffableDataSource<Section, Item>?
+    private var didTapCouponDownload = PassthroughSubject<Void, Never>()
     private var cancellables = Set<AnyCancellable>()
+    
+    override func loadView() {
+        super.loadView()
+        
+        view = homeView
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
         configure()
-        setLayout()
         setDataSource()
+        setHeader()
         bindViewModel()
         homeViewModel.process(action: .loadData)
+        homeViewModel.process(action: .loadCoupon)
     }
 }
 
 private extension HomeViewController {
-    func setLayout() {
-        view.addSubview(homeView)
-        
-        homeView.snp.makeConstraints {
-            $0.leading.trailing.equalToSuperview()
-            $0.top.bottom.equalTo(view.safeAreaLayoutGuide)
-        }
-    }
-    
     func configure() {
         view.backgroundColor = UIColor.bk
     }
-}
-
-private extension HomeViewController {
+    
     func bindViewModel() {
         homeViewModel.state.$collectionViewModels
             .receive(on: DispatchQueue.main)
@@ -49,43 +46,84 @@ private extension HomeViewController {
                 self?.applyItems()
             }
             .store(in: &cancellables)
-    }
-    
-    func setDataSource() {
-        dataSource = UICollectionViewDiffableDataSource(
-            collectionView: homeView.homeCollectionView,
-            cellProvider: { [weak self] collectionView, indexPath, itemIdentifier in
-                guard let self else { return UICollectionViewCell() }
-                switch itemIdentifier {
-                case .banner(let item):
-                    return self.setBannerCell(collectionView, indexPath, item)
-                    
-                case .horizontalProduct(let item):
-                    return self.setProductCell(collectionView, indexPath, item)
-                    
-                case .verticalProduct(let item):
-                    return self.setProductCell(collectionView, indexPath, item)
-                }
-            })
+        
+        didTapCouponDownload
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] _ in
+                self?.homeViewModel.process(action: .didTapCouponButton)
+            }.store(in: &cancellables)
     }
     
     func applyItems() {
         var snapShot = NSDiffableDataSourceSnapshot<Section, Item>()
+        Section.allCases.forEach {
+            snapShot.appendSections([$0])
+        }
+        
         if let bannerItems = homeViewModel.state.collectionViewModels.bannerItems {
-            snapShot.appendSections([.banner])
             snapShot.appendItems(bannerItems, toSection: .banner)
         }
         
         if let horizontalProductItems = homeViewModel.state.collectionViewModels.horizontalProductItems {
-            snapShot.appendSections([.horizontalProduct])
             snapShot.appendItems(horizontalProductItems, toSection: .horizontalProduct)
+            snapShot.appendItems([Item.separate1(.init())], toSection: .separateLine1)
         }
         
-        if let verticalProductItems = homeViewModel.state.collectionViewModels.verticalProductItems {
-            snapShot.appendSections([.verticalProduct])
+        if let verticalProductItems = homeViewModel.state.collectionViewModels.verticalProductItems,
+           let couponItems = homeViewModel.state.collectionViewModels.couponItems {
+            snapShot.appendItems(couponItems, toSection: .couponButton) // 비동기 처리 완료되면 같이 업데이트하기 위함
             snapShot.appendItems(verticalProductItems, toSection: .verticalProduct)
+            snapShot.appendItems([Item.separate2(.init())], toSection: .separateLine2)
         }
+        
+        if let themeItems = homeViewModel.state.collectionViewModels.themeItems {
+            snapShot.appendItems(themeItems.item, toSection: .theme)
+        }
+        
         dataSource?.apply(snapShot)
+    }
+}
+
+private extension HomeViewController {
+    func setDataSource() {
+        dataSource = UICollectionViewDiffableDataSource(
+            collectionView: homeView.homeCollectionView,
+            cellProvider: { [weak self] collectionView, indexPath, itemIdentifier in
+                switch itemIdentifier {
+                case .banner(let item):
+                    return self?.setBannerCell(collectionView, indexPath, item)
+                    
+                case .horizontalProduct(let item):
+                    return self?.setProductCell(collectionView, indexPath, item)
+                    
+                case .separate1(_):
+                    return self?.setSeparateLineCell(collectionView, indexPath)
+                    
+                case .coupon(let item):
+                    return self?.setCouponCell(collectionView, indexPath, item)
+                    
+                case .verticalProduct(let item):
+                    return self?.setProductCell(collectionView, indexPath, item)
+                    
+                case .separate2(_):
+                    return self?.setSeparateLineCell(collectionView, indexPath)
+                    
+                case .theme(let item):
+                    return self?.setThemeCell(collectionView, indexPath, item)
+                }
+            })
+    }
+    
+    func setHeader() {
+        dataSource?.supplementaryViewProvider = { [weak self] collectionView, kind, IndexPath in
+            guard let self = self,
+                  let header = collectionView.dequeueReusableSupplementaryView(
+                    ofKind: UICollectionView.elementKindSectionHeader,
+                    withReuseIdentifier: ThemeHeaderView.identifier,
+                    for: IndexPath) as? ThemeHeaderView else { return UICollectionReusableView() }
+            header.setViewModel(title: homeViewModel.state.collectionViewModels.themeItems?.title)
+            return header
+        }
     }
 }
 
@@ -96,7 +134,7 @@ private extension HomeViewController {
         guard let cell = collectionView.dequeueReusableCell(
             withReuseIdentifier: BannerCell.identifier,
             for: indexPath) as? BannerCell else { return UICollectionViewCell() }
-        cell.setData(info: item)
+        cell.setViewModel(info: item)
         return cell
     }
     
@@ -106,7 +144,35 @@ private extension HomeViewController {
         guard let cell = collectionView.dequeueReusableCell(
             withReuseIdentifier: ProductCell.identifier,
             for: indexPath) as? ProductCell else { return UICollectionViewCell() }
-        cell.setData(info: item)
+        cell.setViewModel(info: item)
+        return cell
+    }
+    
+    func setCouponCell(_ collectionView: UICollectionView,
+                       _ indexPath: IndexPath,
+                       _ item: CouponInfo) -> UICollectionViewCell {
+        guard let cell = collectionView.dequeueReusableCell(
+            withReuseIdentifier: CouponButtonCell.identifier,
+            for: indexPath) as? CouponButtonCell else { return UICollectionViewCell() }
+        cell.setViewModel(info: item, subject: didTapCouponDownload)
+        return cell
+    }
+    
+    func setSeparateLineCell(_ collectionView: UICollectionView,
+                             _ indexPath: IndexPath) -> UICollectionViewCell {
+        guard let cell = collectionView.dequeueReusableCell(
+            withReuseIdentifier: SeparateLineCell.identifier,
+            for: indexPath) as? SeparateLineCell else { return UICollectionViewCell() }
+        return cell
+    }
+    
+    func setThemeCell(_ collectionView: UICollectionView,
+                      _ indexPath: IndexPath,
+                      _ item: ThemeInfo) -> UICollectionViewCell {
+        guard let cell = collectionView.dequeueReusableCell(
+            withReuseIdentifier: ThemeCell.identifier,
+            for: indexPath) as? ThemeCell else { return UICollectionViewCell() }
+        cell.setViewModel(info: item)
         return cell
     }
 }

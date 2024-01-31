@@ -117,7 +117,7 @@ final class ProductCell: UICollectionViewCell {
 }
 
 extension ProductCell {
-    func setData(info: ProductInfo) {
+    func setViewModel(info: ProductInfo) {
         let url = URL(string: info.imageUrl)
         imageView.kf.setImage(with: url)
         productNameLabel.text = info.title
@@ -129,6 +129,41 @@ extension ProductCell {
     }
 }
 
+extension ProductCell {
+    static func horizontalProductSection() -> NSCollectionLayoutSection {
+        let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1),
+                                              heightDimension: .fractionalHeight(1))
+        let item = NSCollectionLayoutItem(layoutSize: itemSize)
+        
+        let groupSize = NSCollectionLayoutSize(widthDimension: .absolute(117),
+                                               heightDimension: .estimated(224))
+        let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitems: [item])
+        
+        let section = NSCollectionLayoutSection(group: group)
+        section.contentInsets = .init(top: 40, leading: 31, bottom: 0, trailing: 31)
+        section.orthogonalScrollingBehavior = .continuous
+        section.interGroupSpacing = 10
+        return section
+    }
+    
+    static func verticalProductSection() -> NSCollectionLayoutSection {
+        let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1/2),
+                                              heightDimension: .estimated(277))
+        let item = NSCollectionLayoutItem(layoutSize: itemSize)
+        item.contentInsets = .init(top: 0, leading: 2.5, bottom: 0, trailing: 2.5)
+        
+        let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1),
+                                               heightDimension: .estimated(224))
+        let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitems: [item])
+        
+        let section = NSCollectionLayoutSection(group: group)
+        section.contentInsets = .init(top: 40, leading: 19 - 2.5, bottom: 0, trailing: 19 - 2.5)
+        section.orthogonalScrollingBehavior = .none
+        section.interGroupSpacing = 14
+        return section
+    }
+}
+
 private extension ProductCell {
     func setLayout() {
         contentView.addSubview(stackView)
@@ -136,36 +171,5 @@ private extension ProductCell {
         stackView.snp.makeConstraints {
             $0.edges.equalToSuperview()
         }
-    }
-}
-
-extension ProductCell {
-    static func horizontalProductSection() -> NSCollectionLayoutSection {
-        let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .fractionalHeight(1))
-        let item = NSCollectionLayoutItem(layoutSize: itemSize)
-        
-        let groupSize = NSCollectionLayoutSize(widthDimension: .absolute(117), heightDimension: .estimated(224))
-        let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitems: [item])
-        
-        let section = NSCollectionLayoutSection(group: group)
-        section.contentInsets = .init(top: 20, leading: 31, bottom: 0, trailing: 31)
-        section.orthogonalScrollingBehavior = .continuous
-        section.interGroupSpacing = 10
-        return section
-    }
-    
-    static func verticalProductSection() -> NSCollectionLayoutSection {
-        let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1/2), heightDimension: .estimated(277))
-        let item = NSCollectionLayoutItem(layoutSize: itemSize)
-        item.contentInsets = .init(top: 0, leading: 2.5, bottom: 0, trailing: 2.5)
-        
-        let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .estimated(224))
-        let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitems: [item])
-        
-        let section = NSCollectionLayoutSection(group: group)
-        section.contentInsets = .init(top: 20, leading: 19 - 2.5, bottom: 0, trailing: 19 - 2.5)
-        section.orthogonalScrollingBehavior = .none
-        section.interGroupSpacing = 14
-        return section
     }
 }

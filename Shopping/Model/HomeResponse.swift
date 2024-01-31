@@ -11,5 +11,5 @@ struct HomeResponse: Decodable {
     let banners: [BannerInfo]
     let horizontalProducts: [ProductInfo]
     let verticalProducts: [ProductInfo]
-    let themes: [Themes]
+    let themes: [ThemeInfo]
 }
