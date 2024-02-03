@@ -7,7 +7,7 @@
 
 import Foundation
 
-enum Section: Int, CaseIterable {
+enum HomeSection: Int, CaseIterable {
     case banner
     case horizontalProduct
     case separateLine1
@@ -17,7 +17,7 @@ enum Section: Int, CaseIterable {
     case theme
 }
 
-enum Item: Hashable {
+enum HomeItem: Hashable {
     case banner(BannerInfo)
     case horizontalProduct(ProductInfo)
     case separate1(SeparateInfo)

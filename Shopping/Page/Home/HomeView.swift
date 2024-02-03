@@ -27,6 +27,18 @@ final class HomeView: UIView {
         return collectionView
     }()
     
+    var rightButtonItem: UIButton = {
+        let button = UIButton(type: .system)
+        button.setImage(SPImage.favoriteOn, for: .normal)
+        return button
+    }()
+    
+    var leftButtonItem: UIButton = {
+        let button = UIButton(type: .system)
+        button.setImage(SPImage.menu, for: .normal)
+        return button
+    }()
+    
     override init(frame: CGRect) {
         super.init(frame: .zero)
         
@@ -50,19 +62,25 @@ private extension HomeView {
     func collectionViewLayout() -> UICollectionViewCompositionalLayout {
         UICollectionViewCompositionalLayout { [weak self] sectionNum, _ in
             guard let self = self else { return nil }
-            switch Section(rawValue: sectionNum) {
+            switch HomeSection(rawValue: sectionNum) {
             case .banner:
                 return BannerCell.bannerSection()
+                
             case .horizontalProduct:
                 return ProductCell.horizontalProductSection()
+                
             case .separateLine1, .separateLine2:
                 return SeparateLineCell.separateSection()
+                
             case .couponButton:
                 return CouponButtonCell.couponButtonSection()
+                
             case .verticalProduct:
                 return ProductCell.verticalProductSection()
+                
             case .theme:
                 return ThemeCell.themeSection()
+                
             case .none:
                 return nil
             }

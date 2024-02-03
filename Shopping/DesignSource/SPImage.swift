@@ -17,6 +17,7 @@ enum SPImage {
     static var next: UIImage = UIImage(resource: .next)
     static var down: UIImage = UIImage(resource: .down)
     static var close: UIImage = UIImage(resource: .close)
+    static var menu: UIImage = UIImage(resource: .menu)
     
     static var favoriteOn: UIImage = UIImage(resource: .favoriteOn)
     static var favoriteOff: UIImage = UIImage(resource: .favoriteOff)

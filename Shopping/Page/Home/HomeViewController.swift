@@ -12,9 +12,27 @@ import UIKit
 final class HomeViewController: UIViewController {
     private let homeView = HomeView()
     private let homeViewModel = HomeViewModel()
-    private var dataSource: UICollectionViewDiffableDataSource<Section, Item>?
+    private var dataSource: UICollectionViewDiffableDataSource<HomeSection, HomeItem>?
     private var didTapCouponDownload = PassthroughSubject<Void, Never>()
     private var cancellables = Set<AnyCancellable>()
+    
+    private lazy var leftBarBtn: UIBarButtonItem = {
+        let button = UIBarButtonItem(
+            image: SPImage.menu,
+            style: .plain,
+            target: self,
+            action: #selector(didTappedLeftBarButton))
+        return button
+    }()
+    
+    private lazy var rightBarBtn: UIBarButtonItem = {
+        let button = UIBarButtonItem(
+            image: SPImage.favoriteOn,
+            style: .plain,
+            target: self,
+            action: #selector(didTappedRightBarButton))
+        return button
+    }()
     
     override func loadView() {
         super.loadView()
@@ -37,6 +55,8 @@ final class HomeViewController: UIViewController {
 private extension HomeViewController {
     func configure() {
         view.backgroundColor = UIColor.bk
+        navigationItem.leftBarButtonItem = leftBarBtn
+        navigationItem.rightBarButtonItem = rightBarBtn
     }
     
     func bindViewModel() {
@@ -54,33 +74,13 @@ private extension HomeViewController {
             }.store(in: &cancellables)
     }
     
-    func applyItems() {
-        var snapShot = NSDiffableDataSourceSnapshot<Section, Item>()
-        Section.allCases.forEach {
-            snapShot.appendSections([$0])
-        }
+    @objc func didTappedLeftBarButton() {
         
-        if let bannerItems = homeViewModel.state.collectionViewModels.bannerItems {
-            snapShot.appendItems(bannerItems, toSection: .banner)
-        }
-        
-        if let horizontalProductItems = homeViewModel.state.collectionViewModels.horizontalProductItems {
-            snapShot.appendItems(horizontalProductItems, toSection: .horizontalProduct)
-            snapShot.appendItems([Item.separate1(.init())], toSection: .separateLine1)
-        }
-        
-        if let verticalProductItems = homeViewModel.state.collectionViewModels.verticalProductItems,
-           let couponItems = homeViewModel.state.collectionViewModels.couponItems {
-            snapShot.appendItems(couponItems, toSection: .couponButton) // 비동기 처리 완료되면 같이 업데이트하기 위함
-            snapShot.appendItems(verticalProductItems, toSection: .verticalProduct)
-            snapShot.appendItems([Item.separate2(.init())], toSection: .separateLine2)
-        }
-        
-        if let themeItems = homeViewModel.state.collectionViewModels.themeItems {
-            snapShot.appendItems(themeItems.item, toSection: .theme)
-        }
-        
-        dataSource?.apply(snapShot)
+    }
+    
+    @objc func didTappedRightBarButton() {
+        let favoriteVC = FavoriteViewController()
+        navigationController?.pushViewController(favoriteVC, animated: true)
     }
 }
 
@@ -124,6 +124,35 @@ private extension HomeViewController {
             header.setViewModel(title: homeViewModel.state.collectionViewModels.themeItems?.title)
             return header
         }
+    }
+    
+    func applyItems() {
+        var snapShot = NSDiffableDataSourceSnapshot<HomeSection, HomeItem>()
+        HomeSection.allCases.forEach {
+            snapShot.appendSections([$0])
+        }
+        
+        if let bannerItems = homeViewModel.state.collectionViewModels.bannerItems {
+            snapShot.appendItems(bannerItems, toSection: .banner)
+        }
+        
+        if let horizontalProductItems = homeViewModel.state.collectionViewModels.horizontalProductItems {
+            snapShot.appendItems(horizontalProductItems, toSection: .horizontalProduct)
+            snapShot.appendItems([HomeItem.separate1(.init())], toSection: .separateLine1)
+        }
+        
+        if let verticalProductItems = homeViewModel.state.collectionViewModels.verticalProductItems,
+           let couponItems = homeViewModel.state.collectionViewModels.couponItems {
+            snapShot.appendItems(couponItems, toSection: .couponButton) // 비동기 처리 완료되면 같이 업데이트하기 위함
+            snapShot.appendItems(verticalProductItems, toSection: .verticalProduct)
+            snapShot.appendItems([HomeItem.separate2(.init())], toSection: .separateLine2)
+        }
+        
+        if let themeItems = homeViewModel.state.collectionViewModels.themeItems {
+            snapShot.appendItems(themeItems.item, toSection: .theme)
+        }
+        
+        dataSource?.apply(snapShot)
     }
 }
 

@@ -23,10 +23,21 @@ final class NetworkManager {
 
 extension NetworkManager {
     func getHomeData() async throws -> HomeResponse {
-        let url = try createURL(path: "/db")
+        let url = try createURL(path: "/JsonAPIFastCampus/db")
         let data = try await fetchData(from: url)
         do {
             let decodeData = try JSONDecoder().decode(HomeResponse.self, from: data)
+            return decodeData
+        } catch {
+            throw NetworkError.decodeError
+        }
+    }
+    
+    func getFavoriteData() async throws -> FavoritesResponse {
+        let url = try createURL(path: "/jsonapifastcampusfavorite/db")
+        let data = try await fetchData(from: url)
+        do {
+            let decodeData = try JSONDecoder().decode(FavoritesResponse.self, from: data)
             return decodeData
         } catch {
             throw NetworkError.decodeError
