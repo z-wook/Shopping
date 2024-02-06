@@ -52,7 +52,7 @@ final class ProductCell: UICollectionViewCell {
     
     private var productNameLabel: UILabel = {
         let label = UILabel()
-        label.textColor = SPColor.bk
+        label.textColor = SPColor.UIKit.bk
         label.font = .systemFont(ofSize: 14, weight: .regular)
         label.numberOfLines = 2
         return label
@@ -74,7 +74,7 @@ final class ProductCell: UICollectionViewCell {
     private var discountReasonLabel: UILabel = {
         let label = UILabel()
         label.font = .systemFont(ofSize: 10, weight: .regular)
-        label.textColor = SPColor.keyColorRed2
+        label.textColor = SPColor.UIKit.keyColorRed2
         return label
     }()
     
@@ -94,14 +94,14 @@ final class ProductCell: UICollectionViewCell {
     private var originalPriceLabel: UILabel = {
         let label = UILabel()
         label.font = .systemFont(ofSize: 12, weight: .medium)
-        label.textColor = SPColor.gray3Cool
+        label.textColor = SPColor.UIKit.gray3Cool
         return label
     }()
     
     private var salePriceLabel: UILabel = {
         let label = UILabel()
         label.font = .systemFont(ofSize: 14, weight: .bold)
-        label.textColor = SPColor.keyColorRed
+        label.textColor = SPColor.UIKit.keyColorRed
         return label
     }()
     
