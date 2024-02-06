@@ -15,8 +15,8 @@ final class CouponButtonCell: UICollectionViewCell {
     
     lazy var couponButton: UIButton = {
         let button = UIButton()
-        button.setImage(SPImage.buttonActivate, for: .normal)
-        button.setImage(SPImage.buttonComplete, for: .disabled)
+        button.setImage(SPImage.UIKit.buttonActivate, for: .normal)
+        button.setImage(SPImage.UIKit.buttonComplete, for: .disabled)
         button.layer.cornerRadius = 5
         button.clipsToBounds = true
         button.addTarget(self, action: #selector(didTappedCouponBtn), for: .touchUpInside)
