@@ -23,7 +23,7 @@ final class SeparateLineCell: UICollectionViewCell {
 
 extension SeparateLineCell {
     private func configure() {
-        contentView.backgroundColor = SPColor.gray0
+        contentView.backgroundColor = SPColor.UIKit.gray0
     }
     
     static func separateSection() -> NSCollectionLayoutSection {
