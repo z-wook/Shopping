@@ -14,7 +14,7 @@ final class ThemeHeaderView: UICollectionReusableView {
     var headerTitleLabel: UILabel = {
         let label = UILabel()
         label.font = .systemFont(ofSize: 16, weight: .bold)
-        label.textColor = SPColor.bk
+        label.textColor = SPColor.UIKit.bk
         label.text = "테마관"
         return label
     }()
