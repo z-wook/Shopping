@@ -64,14 +64,14 @@ final class FavoriteCell: UITableViewCell {
     private var titleLabel: UILabel = {
         let label = UILabel()
         label.font = .systemFont(ofSize: 12, weight: .regular)
-        label.textColor = SPColor.bk
+        label.textColor = SPColor.UIKit.bk
         return label
     }()
     
     private var priceLabel: UILabel = {
         let label = UILabel()
         label.font = .systemFont(ofSize: 15, weight: .bold)
-        label.textColor = SPColor.bk
+        label.textColor = SPColor.UIKit.bk
         return label
     }()
     

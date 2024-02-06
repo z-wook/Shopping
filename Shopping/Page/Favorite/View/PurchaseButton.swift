@@ -22,8 +22,8 @@ final class PurchaseButton: UIButton {
 private extension PurchaseButton {
     func setCustomUI() {
         setTitle("구매하기", for: .normal)
-        setTitleColor(SPColor.keyColorBlue, for: .normal)
-        layer.borderColor = SPColor.keyColorBlue.cgColor
+        setTitleColor(SPColor.UIKit.keyColorBlue, for: .normal)
+        layer.borderColor = SPColor.UIKit.keyColorBlue.cgColor
         layer.borderWidth = 1
         layer.cornerRadius = 5
     }
