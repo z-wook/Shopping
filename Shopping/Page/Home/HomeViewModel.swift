@@ -59,6 +59,7 @@ extension HomeViewModel {
             Task {
                 await transformCoupon(isEnabled: state)
             }
+            
         case .didTapCouponButton:
              downLoadCoupon()
         }

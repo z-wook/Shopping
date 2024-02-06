@@ -18,7 +18,7 @@ final class HomeViewController: UIViewController {
     
     private lazy var leftBarBtn: UIBarButtonItem = {
         let button = UIBarButtonItem(
-            image: SPImage.menu,
+            image: SPImage.UIKit.menu,
             style: .plain,
             target: self,
             action: #selector(didTappedLeftBarButton))
@@ -27,7 +27,7 @@ final class HomeViewController: UIViewController {
     
     private lazy var rightBarBtn: UIBarButtonItem = {
         let button = UIBarButtonItem(
-            image: SPImage.favoriteOn,
+            image: SPImage.UIKit.favoriteOn,
             style: .plain,
             target: self,
             action: #selector(didTappedRightBarButton))
@@ -57,6 +57,8 @@ private extension HomeViewController {
         view.backgroundColor = UIColor.bk
         navigationItem.leftBarButtonItem = leftBarBtn
         navigationItem.rightBarButtonItem = rightBarBtn
+        
+        homeView.homeCollectionView.delegate = self
     }
     
     func bindViewModel() {
@@ -203,6 +205,24 @@ private extension HomeViewController {
             for: indexPath) as? ThemeCell else { return UICollectionViewCell() }
         cell.setViewModel(info: item)
         return cell
+    }
+}
+
+extension HomeViewController: UICollectionViewDelegate {
+    func collectionView(_ collectionView: UICollectionView,
+                        didSelectItemAt indexPath: IndexPath) {
+        guard let sections = dataSource?.snapshot().sectionIdentifiers else { return }
+        switch sections[indexPath.section] {
+        case .banner, .couponButton, .theme:
+            break
+            
+        case .separateLine1, .separateLine2:
+            break
+            
+        case .horizontalProduct, .verticalProduct:
+            let detailVC = DetailViewController()
+            navigationController?.pushViewController(detailVC, animated: true)
+        }
     }
 }
 

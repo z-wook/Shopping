@@ -29,13 +29,13 @@ final class HomeView: UIView {
     
     var rightButtonItem: UIButton = {
         let button = UIButton(type: .system)
-        button.setImage(SPImage.favoriteOn, for: .normal)
+        button.setImage(SPImage.UIKit.favoriteOn, for: .normal)
         return button
     }()
     
     var leftButtonItem: UIButton = {
         let button = UIButton(type: .system)
-        button.setImage(SPImage.menu, for: .normal)
+        button.setImage(SPImage.UIKit.menu, for: .normal)
         return button
     }()
     
