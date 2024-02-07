@@ -1,5 +1,5 @@
 //
-//  DetailViewController.swift
+//  OptionViewController.swift
 //  Shopping
 //
 //  Copyright (c) 2024 z-wook. All right reserved.
@@ -9,9 +9,9 @@ import SnapKit
 import SwiftUI
 import UIKit
 
-final class DetailViewController: UIViewController {
-    private let viewModel = DetailViewModel()
-    private lazy var rootVC = UIHostingController(rootView: DetailRootView(viewModel: viewModel))
+final class OptionViewController: UIViewController {
+    private let viewModel = OptionViewModel()
+    private lazy var rootVC = UIHostingController(rootView: OptionRootView(viewModel: viewModel))
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -20,7 +20,7 @@ final class DetailViewController: UIViewController {
     }
 }
 
-private extension DetailViewController {
+private extension OptionViewController {
     func addRootView() {
         view.addSubview(rootVC.view)
         
@@ -28,8 +28,4 @@ private extension DetailViewController {
             $0.edges.equalToSuperview()
         }
     }
-}
-
-#Preview {
-    DetailViewController()
 }
