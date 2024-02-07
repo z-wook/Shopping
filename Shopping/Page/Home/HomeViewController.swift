@@ -54,7 +54,6 @@ final class HomeViewController: UIViewController {
 
 private extension HomeViewController {
     func configure() {
-        view.backgroundColor = UIColor.bk
         navigationItem.leftBarButtonItem = leftBarBtn
         navigationItem.rightBarButtonItem = rightBarBtn
         

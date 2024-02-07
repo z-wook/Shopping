@@ -5,6 +5,7 @@
 //  Copyright (c) 2024 z-wook. All right reserved.
 //
 
+import Combine
 import Foundation
 
 final class DetailViewModel: ObservableObject {
@@ -20,6 +21,7 @@ final class DetailViewModel: ObservableObject {
     }
     
     struct State {
+        var isError: String?
         var isLoading: Bool = false
         var bannerVM: DetailBannerViewModel?
         var rateVM: DetailRateViewModel?
@@ -32,6 +34,8 @@ final class DetailViewModel: ObservableObject {
     }
     
     @Published private(set) var state = State()
+    private(set) var showOptionVC = PassthroughSubject<Void, Never>()
+    private(set) var showPurchaseVC = PassthroughSubject<Void, Never>()
     private var loadDataTask: Task<Void, Never>?
     private var isFavorite: Bool = false
     private var needShowMore: Bool = true
@@ -48,8 +52,8 @@ extension DetailViewModel {
             loadData()
             
         case .loading(let loading):
-            DispatchQueue.main.async { [weak self] in
-                self?.state.isLoading = loading
+            Task {
+                await toggleLoading(isLoading: loading)
             }
             
         case .getDataSuccess(let response):
@@ -58,21 +62,25 @@ extension DetailViewModel {
             }
             
         case .getDataFailure(let error):
-            print(error)
+            Task {
+                await getDataFailure(error: error)
+            }
             
         case .didTapChangeOption:
-            break
+            showOptionVC.send()
             
         case .didTapMore:
-            needShowMore = false
-            state.moreVM = needShowMore ? DetailMoreViewModel() : nil
+            Task {
+                await toggleMore()
+            }
             
         case .didTapFavorite:
-            isFavorite.toggle()
-            state.purchaseVM = DetailPurchaseViewModel(isFavorite: isFavorite)
+            Task {
+                await toggleFavorite()
+            }
             
         case .didTapPurchase:
-            break
+            showPurchaseVC.send()
         }
     }
 }
@@ -94,7 +102,25 @@ private extension DetailViewModel {
     }
     
     @MainActor
+    func toggleLoading(isLoading: Bool) async {
+        state.isLoading = isLoading
+    }
+    
+    @MainActor
+    func toggleFavorite() async {
+        isFavorite.toggle()
+        state.purchaseVM = DetailPurchaseViewModel(isFavorite: isFavorite)
+    }
+    
+    @MainActor
+    func toggleMore() async {
+        needShowMore = false
+        state.moreVM = needShowMore ? DetailMoreViewModel() : nil
+    }
+    
+    @MainActor
     func transformProductDetailResponse(response: ProductDetailResponse) async {
+        state.isError = nil
         state.bannerVM = DetailBannerViewModel(imageUrls: response.bannerImages)
         state.rateVM = DetailRateViewModel(rate: response.product.rate)
         state.title = response.product.name
@@ -108,5 +134,10 @@ private extension DetailViewModel {
         state.mainImageUrls = response.detailImages
         state.moreVM = needShowMore ? DetailMoreViewModel() : nil
         state.purchaseVM = DetailPurchaseViewModel(isFavorite: isFavorite)
+    }
+    
+    @MainActor
+    func getDataFailure(error: Error) async {
+        state.isError = "Error: \(error.localizedDescription)"
     }
 }

@@ -13,18 +13,25 @@ struct DetailRootView: View {
     
     var body: some View {
         VStack(spacing: 0) {
-            ScrollView(.vertical) {
-                VStack(spacing: 0) {
-                    bannerView
-                    rateView
-                    titleView
-                    optionView
-                    priceView
-                    mainImageView
+            if viewModel.state.isLoading {
+                Text("로딩중...")
+            } else {
+                if let error = viewModel.state.isError {
+                    Text(error)
                 }
+                ScrollView(.vertical) {
+                    VStack(spacing: 0) {
+                        bannerView
+                        rateView
+                        titleView
+                        optionView
+                        priceView
+                        mainImageView
+                    }
+                }
+                moreView
+                purchaseView
             }
-            moreView
-            purchaseView
         }
         .onAppear(perform: {
             viewModel.process(action: .loadData)
