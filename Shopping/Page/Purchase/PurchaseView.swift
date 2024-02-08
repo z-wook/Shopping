@@ -5,10 +5,13 @@
 //  Copyright (c) 2024 z-wook. All right reserved.
 //
 
+import Combine
 import SnapKit
 import UIKit
 
 final class PurchaseView: UIView {
+    private var didTapCouponDownload: PassthroughSubject<Void, Never>
+    
     private var scrollView: UIScrollView = {
         let view = UIScrollView()
         view.alwaysBounceVertical = true
@@ -41,17 +44,21 @@ final class PurchaseView: UIView {
         return stack
     }()
     
-    private var purchaseButton: UIButton = {
+    private lazy var purchaseButton: UIButton = {
         let button = UIButton(type: .system)
         button.setTitle("결제하기", for: .normal)
         button.setTitleColor(SPColor.UIKit.wh, for: .normal)
         button.titleLabel?.font = SPFont.UIKit.m16
         button.layer.backgroundColor = SPColor.UIKit.keyColorBlue.cgColor
         button.layer.cornerRadius = 5
+        button.addAction(UIAction(handler: { [weak self] _ in
+            self?.didTapCouponDownload.send()
+        }), for: .touchUpInside)
         return button
     }()
     
-    override init(frame: CGRect) {
+    init(subject: PassthroughSubject<Void, Never>) {
+        self.didTapCouponDownload = subject
         super.init(frame: .zero)
         
         configure()

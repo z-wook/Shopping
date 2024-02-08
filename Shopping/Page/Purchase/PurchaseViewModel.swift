@@ -5,6 +5,7 @@
 //  Copyright (c) 2024 z-wook. All right reserved.
 //
 
+import Combine
 import Foundation
 
 final class PurchaseViewModel: ObservableObject {
@@ -18,6 +19,7 @@ final class PurchaseViewModel: ObservableObject {
     }
     
     @Published private(set) var state = State()
+    private(set) var showPaymentVC = PassthroughSubject<Void, Never>()
 }
 
 extension PurchaseViewModel {
@@ -56,6 +58,6 @@ private extension PurchaseViewModel {
     
     @MainActor
     func didTapPurchaseButton() async {
-        print("구매 버튼 누름")
+        showPaymentVC.send()
     }
 }
