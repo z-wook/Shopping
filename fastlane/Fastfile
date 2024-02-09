@@ -1,0 +1,11 @@
+# Uncomment the line if you want fastlane to automatically update itself
+# update_fastlane
+
+default_platform(:ios)
+
+platform :ios do
+  desc "자동으로 빌드 넘버 올리는 fastlane"
+  lane :increment_build do
+	increment_build_number # automatically increment by one
+  end
+end
