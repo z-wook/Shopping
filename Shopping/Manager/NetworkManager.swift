@@ -17,6 +17,7 @@ enum NetworkError: Error {
 
 final class NetworkManager {
     static let shared = NetworkManager()
+    private let HOST_URL = "https://my-json-server.typicode.com/JeaSungLee"
     
     private init() { }
 }
